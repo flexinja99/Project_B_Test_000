@@ -9,6 +9,20 @@ public class PlayerController : MonoBehaviour
     Camera viewCamera;
     Vector3 velocity;
     public ProjectileController projectileController;
+    public int Player_hp = 20;
+
+    public void Player_Damaged(int damage)
+    {
+        Player_hp -= damage;
+
+        if (Player_hp <= 0)
+        {
+            GameObject temp = this.gameObject;
+            Destroy(temp);
+        }
+
+
+    }
 
 
     void Start()
@@ -32,9 +46,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + velocity * Time.fixedDeltaTime);
-        
+
     }
 }

@@ -1,10 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ProjectileMove : MonoBehaviour
 {
     public Vector3 launchDirection;
+
+    public enum BULLETTYPE
+    {
+        PLAEYR,
+        ENMEY,
+    }
+
+    public BULLETTYPE bulletType = BULLETTYPE.PLAEYR;
 
     private void FixedUpdate()
     {
@@ -26,7 +35,7 @@ public class ProjectileMove : MonoBehaviour
 
         }
 
-        if (collision.gameObject.tag == "Monster")
+        if (collision.gameObject.tag == "Monster")      
         {
             collision.gameObject.GetComponent<MonsterController>().Monster_Damaged(1);
             GameObject temp = this.gameObject;        //나 자신을 가져와서 temp에 입력한다
@@ -46,9 +55,18 @@ public class ProjectileMove : MonoBehaviour
 
         }
 
-        if (other.gameObject.tag == "Monster")
+        if (other.gameObject.tag == "Monster" && bulletType == BULLETTYPE.PLAEYR)
         {
             other.gameObject.GetComponent<MonsterController>().Monster_Damaged(1);
+            other.gameObject.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0.5f),
+                    0.1f, 10, 1);
+            GameObject temp = this.gameObject;        //나 자신을 가져와서 temp에 입력한다
+            Destroy(temp);                            // 곧바로 파괴한다
+        }
+
+        if (other.gameObject.tag == "Player" && bulletType == BULLETTYPE.ENMEY)
+        {
+            other.gameObject.GetComponent<PlayerController>().Player_Damaged(1);
             GameObject temp = this.gameObject;        //나 자신을 가져와서 temp에 입력한다
             Destroy(temp);                            // 곧바로 파괴한다
         }
